@@ -1,0 +1,45 @@
+*{
+  margin:0px;
+}
+#main,#canvas{
+  border: 2px solid black;
+  margin-top: 10px;
+
+}
+#canvas{
+  width: 60%;
+  margin:auto;
+  min-height:800px; 
+  /* border: 2px solid black; */
+}
+#form-body{
+  width:300px;
+  height: 400px;
+  border: 1px solid grey;
+  margin:auto;
+  margin-top:200px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.headings{
+  margin: 4px;
+  padding:2px;
+  margin-top: 30px;
+}
+.spot-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+}
+.spot {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    text-align: center;
+    line-height: 30px;
+    font-weight: bold;
+    background-color: #d1e7dd; /* available = light green */
+}
+.spot.booked {
+    background-color: #f8d7da; /* red for booked */
+}

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 30px);
+            gap: 6px;
+            margin-top: 10px;
+        }
+        .spot {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+        }
+        .booked {
+            background-color: #e74c3c;
+        }
+        .available {
+            background-color: #2ecc71;
+        }
+        .spot-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 30px);
+        gap: 6px;
+        margin-top: 10px;
+    }
+
+    .spot {
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: white;
+    }
+
+    .booked {
+        background-color: #e74c3c;
+    }
+
+    .available {
+        background-color: #2ecc71;
+    }
+
+    /*gives a visible border to each card */
+    .card {
+        border: 2px solid #007bff; /* Blue border (Bootstrap primary color) */
+        border-radius: 10px;
+    }
+    .heading-border {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid blue;
+        border-radius: 8px;
+        background-color:  white;
+        font-weight: bold;
+        color: blue;
+    }
+    </style>
+</head>
+<body>
+<div id="main">
+    <div id="canvas">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg light-green-bg border-bottom">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-primary" href="{{ url_for('admin_dashboard') }}">Welcome {{ admin.Fullname }}</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#adminNavbar" aria-controls="adminNavbar" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="adminNavbar">
+                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link fw-bold" href="{{ url_for('admin_dashboard') }}">Home |</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold" href="{{ url_for('show_users') }}">Users |</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold" href="{{ url_for('search_page') }}">Search |</a></li>
+                        <li class="nav-item"> <a class="nav-link fw-bold" href="{{ url_for('admin_summary') }}">Summary |</a></li>
+                        <li class="nav-item"><a class="nav-link fw-bold text-danger" href="/">Logout</a></li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="{{ url_for('edit_admin_profile') }}" class="btn btn-warning">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Content Section -->
+        <div id="content" class="container mt-4 text-center" >
+            <h3 class="text-center mb-4 heading-border">Parking Lots</h3>
+
+            <div class="row justify-content-center">
+                {% for entry in lots_data %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ entry.lot.prime_location_name }}</h5>
+                                <!-- Action Buttons -->
+                                <div class="mt-3 d-flex justify-content-between">
+                                    <a href="{{ url_for('edit_parking_lot',parking_lot_id=entry.lot.parking_lot_id) }}" class="btn btn-warning btn-sm">Edit</a>|<a href="{{ url_for('delete_parking_lot', parking_lot_id=entry.lot.parking_lot_id) }}" style="color: red;" onclick="return confirm('Are you sure you want to delete this parking lot?');">Delete</a>
+                                </div>
+                                <p class="card-text"><strong>Occupied:</strong> {{ entry.occupied }} / {{ entry.total }}</p>
+
+                                <!-- Spot Grid -->
+                                <div class="spot-grid">
+                                    {% for spot in entry.spots %}
+                                        <a href="{{ url_for('view_parking_spot', parking_spot_id=spot.parking_spot_id) }}"
+                                        class="text-decoration-none">
+                                            <div class="spot {% if spot.status == 'booked' %}booked{% else %}available{% endif %}">
+                                                {{ spot.spot_number }}
+                                            </div>
+                                        </a>
+                                    {% endfor %}
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Add Lot Button -->
+            <div class="text-end mt-4">
+                <a href="/new_parking_lot" class="btn btn-success">+ Add Lot</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYbPZb1a6IYT6nL
